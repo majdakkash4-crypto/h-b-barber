@@ -31,14 +31,35 @@
   var burger = document.querySelector('.burger');
   var links = document.querySelector('.nav-links');
   if(burger && links){
-    burger.addEventListener('click', function(){
-      burger.classList.toggle('open');
-      links.classList.toggle('open');
-    });
+    var scrim = document.createElement('div');
+    scrim.className = 'nav-scrim';
+    document.body.appendChild(scrim);
+    burger.setAttribute('aria-expanded','false');
+
+    function openMenu(){
+      burger.classList.add('open'); links.classList.add('open'); scrim.classList.add('open');
+      document.body.classList.add('nav-open');
+      burger.setAttribute('aria-expanded','true');
+      burger.setAttribute('aria-label','Menü schließen');
+    }
+    function closeMenu(){
+      burger.classList.remove('open'); links.classList.remove('open'); scrim.classList.remove('open');
+      document.body.classList.remove('nav-open');
+      burger.setAttribute('aria-expanded','false');
+      burger.setAttribute('aria-label','Menü öffnen');
+    }
+    function toggleMenu(){ links.classList.contains('open') ? closeMenu() : openMenu(); }
+
+    burger.addEventListener('click', toggleMenu);
+    scrim.addEventListener('click', closeMenu);
     links.querySelectorAll('a').forEach(function(a){
-      a.addEventListener('click', function(){
-        burger.classList.remove('open'); links.classList.remove('open');
-      });
+      a.addEventListener('click', closeMenu);
+    });
+    document.addEventListener('keydown', function(e){
+      if(e.key === 'Escape' || e.keyCode === 27) closeMenu();
+    });
+    window.addEventListener('resize', function(){
+      if(window.innerWidth > 980 && links.classList.contains('open')) closeMenu();
     });
   }
 
@@ -138,8 +159,8 @@
       var ifr = document.createElement('iframe');
       ifr.setAttribute('loading','lazy');
       ifr.setAttribute('referrerpolicy','no-referrer-when-downgrade');
-      ifr.setAttribute('title','Karte H&B Barber, Armlandstraße 8, Gescher');
-      ifr.src='https://www.google.com/maps?q=Armlandstra%C3%9Fe%208,%2048712%20Gescher&output=embed';
+      ifr.setAttribute('title','Karte H&B Barber, Remigiusstraße 12, Borken');
+      ifr.src='https://www.google.com/maps?q=Remigiusstra%C3%9Fe%2012,%2046325%20Borken&output=embed';
       card.insertBefore(ifr, card.firstChild);
       if(consentBox) consentBox.style.display='none';
     }
