@@ -376,3 +376,31 @@ body.nav-open{overflow:hidden}
 
 /* float anim for hero badge */
 .parallax{will-change:transform}
+
+/* ---------- image lightbox ---------- */
+.gcell img,.about-figure .frame img{cursor:zoom-in}
+.gcell,.about-figure .frame{cursor:zoom-in}
+.lightbox{
+  position:fixed;inset:0;z-index:120;display:flex;align-items:center;justify-content:center;
+  padding:max(28px,4vw);background:rgba(6,6,8,.92);backdrop-filter:blur(8px);
+  opacity:0;visibility:hidden;transition:opacity .35s var(--ease),visibility .35s;
+}
+.lightbox.open{opacity:1;visibility:visible}
+.lightbox img{
+  max-width:100%;max-height:100%;border-radius:5px;border:1px solid var(--line);
+  box-shadow:0 50px 110px -40px rgba(0,0,0,.9);
+  transform:scale(.94);transition:transform .4s var(--ease);object-fit:contain;
+}
+.lightbox.open img{transform:scale(1)}
+.lightbox-close{
+  position:absolute;top:22px;right:22px;width:48px;height:48px;border-radius:50%;
+  display:grid;place-items:center;cursor:pointer;
+  background:rgba(13,13,16,.85);border:1px solid var(--line);color:var(--text);
+  transition:border-color .3s,color .3s,transform .3s var(--ease);
+}
+.lightbox-close:hover{border-color:var(--c-line);color:var(--c-light);transform:rotate(90deg)}
+.lightbox-close svg{width:22px;height:22px}
+.lightbox-cap{
+  position:absolute;left:0;right:0;bottom:max(22px,3vh);text-align:center;
+  font-family:'Space Mono',monospace;font-size:.66rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);
+}

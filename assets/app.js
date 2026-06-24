@@ -178,4 +178,56 @@
 
   /* ---- year ---- */
   document.querySelectorAll('[data-year]').forEach(function(el){ el.textContent = new Date().getFullYear(); });
+
+  /* ============================================================
+     IMAGE LIGHTBOX — salon photos enlarge on click
+     ============================================================ */
+  (function(){
+    var triggers = [].slice.call(document.querySelectorAll('.gcell, .about-figure .frame'));
+    if(!triggers.length) return;
+
+    var box = document.createElement('div');
+    box.className = 'lightbox';
+    box.setAttribute('role','dialog');
+    box.setAttribute('aria-modal','true');
+    box.setAttribute('aria-label','Bildansicht');
+    box.innerHTML =
+      '<button class="lightbox-close" aria-label="Schließen" type="button">' +
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>' +
+      '</button>' +
+      '<img alt="">' +
+      '<div class="lightbox-cap"></div>';
+    document.body.appendChild(box);
+
+    var bigImg = box.querySelector('img');
+    var cap = box.querySelector('.lightbox-cap');
+    var closeBtn = box.querySelector('.lightbox-close');
+    var lastFocus = null;
+
+    function open(src, alt){
+      bigImg.src = src;
+      bigImg.alt = alt || '';
+      cap.textContent = alt || '';
+      lastFocus = document.activeElement;
+      box.classList.add('open');
+      document.body.style.overflow = 'hidden';
+      closeBtn.focus();
+    }
+    function close(){
+      box.classList.remove('open');
+      document.body.style.overflow = '';
+      if(lastFocus && lastFocus.focus) lastFocus.focus();
+    }
+
+    triggers.forEach(function(cell){
+      var img = cell.querySelector('img');
+      if(!img) return;
+      cell.addEventListener('click', function(){ open(img.currentSrc || img.src, img.alt); });
+    });
+    closeBtn.addEventListener('click', close);
+    box.addEventListener('click', function(e){ if(e.target === box) close(); });
+    document.addEventListener('keydown', function(e){
+      if((e.key === 'Escape' || e.keyCode === 27) && box.classList.contains('open')) close();
+    });
+  })();
 })();
